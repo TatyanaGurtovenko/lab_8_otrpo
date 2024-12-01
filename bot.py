@@ -53,15 +53,14 @@ def send_email(to_email: str, message_text: str) -> bool:
         msg['Subject'] = "Уведомление от Telegram-бота"
         msg.attach(MIMEText(message_text, 'plain'))
 
-        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-        server.starttls()
-        server.login(SMTP_LOGIN, SMTP_PASSWORD)
-        server.send_message(msg)
-        server.quit()
+        with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT) as server:
+            server.login(SMTP_LOGIN, SMTP_PASSWORD)
+            server.send_message(msg)
         return True
     except Exception as e:
         print(f"Ошибка: {e}")
         return False
+
 
 
 def main():
